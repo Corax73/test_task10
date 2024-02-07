@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes(
+    [
+        'register' => false,
+        'reset' => false
+    ]
+);
+
+Route::controller(MainController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('main');
+        Route::get('/cart', 'show')->name('product.show')->middleware('auth')->name('cart');
+    });
