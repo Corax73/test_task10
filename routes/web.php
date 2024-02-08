@@ -24,5 +24,5 @@ Auth::routes(
 Route::controller(MainController::class)
     ->group(function () {
         Route::get('/', 'index')->name('main');
-        Route::get('/cart', 'show')->name('product.show')->middleware('auth')->name('cart');
+        Route::get('/cart', 'show')->middleware('auth')->name('cart');
     });

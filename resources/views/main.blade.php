@@ -11,7 +11,7 @@
 <body>
     <header class="bg-dark py-2 py-md-3">
         <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 gap-md-1">
-            <a class="text-light text-decoration-none fs-4" href="/index.html">НА ГЛАВНУЮ</a>
+            <a class="text-light text-decoration-none fs-4" href="{{ route('main') }}">НА ГЛАВНУЮ</a>
             <!-- TODO: скрывать, когда пользователь не авторизован -->
             <div class="d-flex flex-column align-items-center">
                 <span class="bg-primary fs-6 text-light px-2 rounded-pill">999 баллов</span>
@@ -19,7 +19,7 @@
             </div>
 
             <div>
-                <a class="btn" href="/cart.html" title="Корзина">
+                <a class="btn" href="{{ route('cart') }}" title="Корзина">
                     <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="#fff" stroke-width="1.5" />
                         <path d="M16.5 18.0001C17.3284 18.0001 18 18.6716 18 19.5001C18 20.3285 17.3284 21.0001 16.5 21.0001C15.6716 21.0001 15 20.3285 15 19.5001C15 18.6716 15.6716 18.0001 16.5 18.0001Z" stroke="#fff" stroke-width="1.5" />
