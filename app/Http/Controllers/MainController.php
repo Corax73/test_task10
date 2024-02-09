@@ -10,4 +10,9 @@ class MainController extends Controller
     {
         return view('layouts.index');
     }
+
+    public function show()
+    {
+        return view('layouts.cart');
+    }
 }

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('pageTitle')</title>
-    @vite("resources/css/app.css")
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
@@ -13,10 +13,12 @@
         <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 gap-md-1">
             <a class="text-light text-decoration-none fs-4" href="{{ route('main') }}">НА ГЛАВНУЮ</a>
             <!-- TODO: скрывать, когда пользователь не авторизован -->
+            @auth
             <div class="d-flex flex-column align-items-center">
                 <span class="bg-primary fs-6 text-light px-2 rounded-pill">999 баллов</span>
-                <span class="login text-light fs-6">elon-musk@spacex.com</span>
+                <span class="login text-light fs-6">{{ auth()->user()->email }}</span>
             </div>
+            @endauth
 
             <div>
                 <a class="btn" href="{{ route('cart') }}" title="Корзина">
@@ -26,15 +28,17 @@
                         <path d="M2 3L2.26121 3.09184C3.5628 3.54945 4.2136 3.77826 4.58584 4.32298C4.95808 4.86771 4.95808 5.59126 4.95808 7.03836V9.76C4.95808 12.7016 5.02132 13.6723 5.88772 14.5862C6.75412 15.5 8.14857 15.5 10.9375 15.5H12M16.2404 15.5C17.8014 15.5 18.5819 15.5 19.1336 15.0504C19.6853 14.6008 19.8429 13.8364 20.158 12.3075L20.6578 9.88275C21.0049 8.14369 21.1784 7.27417 20.7345 6.69708C20.2906 6.12 18.7738 6.12 17.0888 6.12H11.0235M4.95808 6.12H7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
                 </a>
-
-                <a class="btn" href="/signin.html" title="Войти">
+                @guest                    
+                <a class="btn" href="{{ route('login') }}" title="Войти">
                     <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.00098 11.999L16.001 11.999M16.001 11.999L12.501 8.99902M16.001 11.999L12.501 14.999" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M9.00195 7C9.01406 4.82497 9.11051 3.64706 9.87889 2.87868C10.7576 2 12.1718 2 15.0002 2L16.0002 2C18.8286 2 20.2429 2 21.1215 2.87868C22.0002 3.75736 22.0002 5.17157 22.0002 8L22.0002 16C22.0002 18.8284 22.0002 20.2426 21.1215 21.1213C20.3531 21.8897 19.1752 21.9862 17 21.9983M9.00195 17C9.01406 19.175 9.11051 20.3529 9.87889 21.1213C10.5202 21.7626 11.4467 21.9359 13 21.9827" stroke="#fff" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
                 </a>
+                @endguest
                 <!-- Кнопка выйти -->
-                <!-- <button class="btn" title="Выйти">
+                @auth
+                <button class="btn" id="btn-logout" title="Выйти">
                     <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M9 4.5H8C5.64298 4.5 4.46447 4.5 3.73223 5.23223C3 5.96447 3 7.14298 3 9.5V14.5C3 16.857 3 18.0355 3.73223 18.7678C4.46447 19.5 5.64298 19.5 8 19.5H9"
@@ -44,7 +48,8 @@
                             stroke="#fff" stroke-width="1.5" />
                         <path d="M12 11V13" stroke="#fff" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
-                </button> -->
+                </button>
+                @endauth
             </div>
         </div>
     </header>
