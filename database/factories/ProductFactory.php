@@ -21,6 +21,7 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'price' => rand(10000, 200000),
             'cover' => 'default.jpg',
+            'bonus_program' => mt_rand(0, 1)
         ];
     }
 }

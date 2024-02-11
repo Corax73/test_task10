@@ -15,7 +15,7 @@
             <!-- TODO: скрывать, когда пользователь не авторизован -->
             @auth
             <div class="d-flex flex-column align-items-center">
-                <span class="bg-primary fs-6 text-light px-2 rounded-pill">999 баллов</span>
+                <span class="bg-primary fs-6 text-light px-2 rounded-pill">{{ auth()->user()->bonuses }} баллов</span>
                 <span class="login text-light fs-6">{{ auth()->user()->email }}</span>
             </div>
             @endauth

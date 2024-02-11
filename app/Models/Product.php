@@ -23,7 +23,12 @@ class Product extends Model
 
     public function scopeDateDescending($query)
     {
-        return $query->orderByDesc('created_at')->paginate(12);
+        return $query->orderByDesc('created_at')->select(['id', 'title', 'price', 'cover', 'bonus_program'])->paginate(12);
+    }
+
+    public function scopeDateDescendingByIds($query, array $ids)
+    {
+        return $query->orderByDesc('created_at')->select(['id', 'title', 'price', 'cover', 'bonus_program'])->whereIn('id', $ids)->get();
     }
 
     public function cart() {
