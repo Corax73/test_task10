@@ -1,13 +1,14 @@
-const btnAdd = document.getElementsByClassName('btn btn-primary add-product');
+const btnAddPrimary = document.getElementsByClassName('btn btn-primary add-product');
+const btnAddOutline = document.getElementsByClassName('btn btn-outline-primary add-product');
 
 /**
  * handle the event
  */
-function btnAddHandler() {
-    for (let i = 0; i < btnAdd.length; i++) {
-        btnAdd[i].addEventListener('click', function (e) {
+function btnAddHandler(btn) {
+    for (let i = 0; i < btn.length; i++) {
+        btn[i].addEventListener('click', function (e) {
             e.preventDefault();
-            window.axios.post('/cart/product/' + btnAdd[i].dataset.id)
+            window.axios.post('/cart/product/' + btn[i].dataset.id)
                 .then(response => {
                     location.reload()
                 })
@@ -22,7 +23,8 @@ function btnAddHandler() {
  * script initialization
  */
 function init() {
-    btnAddHandler();
+    btnAddHandler(btnAddPrimary);
+    btnAddHandler(btnAddOutline);
 }
 
 init();

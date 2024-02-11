@@ -22,16 +22,18 @@
                         <p class="fw-bold fs-5 m-0">
                             {{ $product->price }}
                         </p>
-                        <button class="btn btn-primary add-product" id="btn-add-product" data-id="{{ $product->id }}">
+                        <!-- TODO: этот блок появлется после нажатия кнопки "В корзину" -->
+                        @if (isset($addedProducts) && array_key_exists($product->id, $addedProducts))
+                        <div class="d-flex align-items-center gap-3">
+                                    <button class="btn btn-outline-primary del-product" data-id="{{ $product->id }}">-</button>
+                                    <span>{{ $addedProducts[$product->id] }}</span>
+                                    <button class="btn btn-outline-primary add-product" data-id="{{ $product->id }}">+</button>
+                        </div>
+                        @else
+                        <button class="btn btn-primary add-product" data-id="{{ $product->id }}">
                             В корзину
                         </button>
-
-                        <!-- TODO: этот блок появлется после нажатия кнопки "В корзину" -->
-                        <!-- <div class="d-flex align-items-center gap-3">
-                                    <button class="btn btn-outline-primary">-</button>
-                                    <span>1</span>
-                                    <button class="btn btn-outline-primary">+</button>
-                                </div> -->
+                        @endif
                     </div>
                 </div>
             </article>

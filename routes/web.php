@@ -26,4 +26,5 @@ Route::controller(MainController::class)
         Route::get('/', 'index')->name('main');
         Route::get('/cart', 'show')->middleware('auth')->name('cart');
         Route::post('/cart/product/{id}', 'addProduct')->middleware('auth')->name('addProduct');
+        Route::delete('/cart/product/{id}', 'delProduct')->middleware('auth')->name('delProduct');
     });

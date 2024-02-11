@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,21 @@ class MainController extends Controller
     public function index()
     {
         $products = Product::dateDescending();
-        return view('layouts.index', ['products' => $products]);
+        $data = ['products' => $products];
+        $userCart = Cart::where(['user_id' => Auth::id()])
+            ->with('products:id')
+            ->get();
+        if ($userCart->isNotEmpty()) {
+            $data['addedProducts'] = $userCart->first()
+                ?->products
+                ?->map(function ($item) use ($userCart) {
+                    $pivotRow = $userCart->first()->products()->where('product_id', $item?->id)->first()->pivot;
+                    return [$item?->id => $pivotRow->quantity];
+                })->mapWithKeys(function($item) {
+                    return $item;
+                })->toArray();
+        }
+        return view('layouts.index', $data);
     }
 
     public function show()
@@ -22,14 +37,13 @@ class MainController extends Controller
 
     public function addProduct(int $id)
     {
-        $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
-        if ($cart->products->contains($id)) {
-            $pivotRow = $cart->products()->where('product_id', $id)->first()->pivot;
-            $quantity = $pivotRow->quantity + 1;
-            $pivotRow->update(['quantity' => $quantity]);
-        } else {
-            $cart->products()->attach($id, ['quantity' => 1]);
-        }
-        return  $this->index();
+        CartRepository::addProduct($id, Auth::id());
+        return $this->index();
+    }
+
+    public function delProduct(int $id)
+    {
+        CartRepository::delProduct($id, Auth::id());
+        return $this->index();
     }
 }
