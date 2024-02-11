@@ -22,7 +22,7 @@
                         <p class="fw-bold fs-5 m-0">
                             {{ $product->price }}
                         </p>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary add-product" id="btn-add-product" data-id="{{ $product->id }}">
                             В корзину
                         </button>
 

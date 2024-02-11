@@ -25,4 +25,8 @@ class Product extends Model
     {
         return $query->orderByDesc('created_at')->paginate(12);
     }
+
+    public function cart() {
+        return $this->belongsToMany(Cart::class)->withPivot('quantity');
+    }
 }

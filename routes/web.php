@@ -25,4 +25,5 @@ Route::controller(MainController::class)
     ->group(function () {
         Route::get('/', 'index')->name('main');
         Route::get('/cart', 'show')->middleware('auth')->name('cart');
+        Route::post('/cart/product/{id}', 'addProduct')->middleware('auth')->name('addProduct');
     });

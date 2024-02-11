@@ -5,6 +5,7 @@ const btn = document.getElementById('btn-logout');
  */
 function btnHandler() {
     btn.addEventListener('click', function (e) {
+        e.preventDefault();
         window.axios.post('/logout')
             .then(response => {
                 location.reload()
@@ -19,7 +20,7 @@ function btnHandler() {
  * script initialization
  */
 function init() {
-    btnHandler();
+    if (btn) (btnHandler());
 }
 
 init();
