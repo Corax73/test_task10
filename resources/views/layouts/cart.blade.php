@@ -26,9 +26,9 @@
                             <p class="fw-bold fs-6 m-0">
                                 цена без скидки - {{ $product->price }} ₽ / шт.
                             </p>
-                            @if ($product->bonus_program)
+                            @if ($product->bonus_program && isset($discountOnSomeProducts))
                             <p class="fw-bold fs-6 m-0">
-                                с учётом скидки <span>{{ $discount }}%</span> - {{ $product->price - $product->price * $discount / 100}} ₽ / шт.
+                                с учётом скидки <span>{{ $discountOnSomeProducts }}%</span> - {{ $product->price - $product->price * $discountOnSomeProducts / 100}} ₽ / шт.
                             </p>
                             @endif
                         </div>
@@ -42,8 +42,10 @@
             <div class="card p-3 mt-4">
                 <p class="fs-4">Общая сумма заказа:</p>
                 <p class="fw-bold">{{ $totalFull }} ₽</p>
-                <p class="fs-4">Общая сумма заказа c учётом скидки <span>{{ $discount }}%</span>:</p>
+                @if (isset($totalDiscount))
+                <p class="fs-4">Общая сумма заказа c учётом скидки <span>{{ $totalDiscount }}%</span>:</p>
                 <p class="fw-bold">{{ $discountedPrice }} ₽</p>
+                @endif
                 <button class="btn btn-primary">Заказать</button>
             </div>
         </div>

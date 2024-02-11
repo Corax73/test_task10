@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Repositories\CartRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
@@ -32,40 +31,7 @@ class MainController extends Controller
 
     public function show()
     {
-        $data = [];
-        $userCart = Cart::where(['user_id' => Auth::id()])
-            ->with('products:id')
-            ->get();
-        if ($userCart->isNotEmpty()) {
-            $quantityById = $userCart->first()
-                ?->products
-                ?->map(function ($item) use ($userCart) {
-                    $pivotRow = $userCart->first()->products()->where('product_id', $item?->id)->first()->pivot;
-                    return [$item?->id => $pivotRow->quantity];
-                })->mapWithKeys(function ($item) {
-                    return $item;
-                })->toArray();
-            $products = Product::dateDescendingByIds(array_keys($quantityById));
-            $totalFull = $products->map(function ($item) use ($quantityById) {
-                return $item->price * $quantityById[$item->id];
-            })->sum();
-            $data = [
-                'products' => $products,
-                'quantity' => $quantityById,
-                'totalFull' => $totalFull
-            ];
-            if (Auth::user()->bonuses) {
-                $discount = ceil(($totalFull - Auth::user()->bonuses) / $totalFull * 100);
-                $discountedPrice = $totalFull - Auth::user()->bonuses;
-            }
-            $data = array_merge(
-                [
-                    'discount' => $discount,
-                    'discountedPrice' => $discountedPrice
-                ],
-                $data
-            );
-        }
+        $data = CartRepository::discountCalculation(Auth::id());
         return view('layouts.cart', $data);
     }
 
