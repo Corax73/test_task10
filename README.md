@@ -1,66 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Тестовое задание
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Суть задания
 
-## About Laravel
+Необходимо реализовать упрощенную версию интернет-магазина по готовой верстке: страница со списком товаров, корзина, возможность авторизации.
+Верстка проекта: https://github.com/nikikozyrev/test-project
+В задании можно опционально выполнить задание "со звёздочкой": реализовать бонусные баллы для пользователей, которые будут давать скидку на заказ. Все пункты ТЗ, относящиеся к дополнительному заданию отмечены "*". В верстке сразу заложено дополнительное задание, если вы не будете выполнять его, то просто уберите все ненужные части верстки или игнорируйте их.
+Задание необходимо выполнить на Laravel 10, наличие js не обязательно, но будет плюсом.
+Задание не самое маленькое, но если вы его сделаете, то, как минимум, у вас будет хороший проект в портфолио: мы дадим вам максимальную обратную связь, чтобы вы могли качественно доработать проект и показывать его при следующих трудоустройствах.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+В задании мы намеренно опустили некоторую функциональность, которая обычно присутствует в интернет-магазинах, чтобы упростить задачу:
+1. Нет админки: все товары магазина должны создаваться через сиды (товаров должно быть на 6 или более страниц)
+2. Нет регистрации: все пользователи должны заполняться через сиды
+3. Нет оформления заказа: после клика на кнопку заказа ничего не должно происходить
+4. Нет возможности удалить товар или изменить количество на странице корзины
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Описания компонентов сайта
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Компоненты сайта
+1. Главная страница с товарами
+2. Страница входа
+3. Страница корзины
+4. Шапка
+Шапка
+Содержит:
+Ссылка на главную страницу
+Состояние: пользователь авторизован
+Ссылка на корзину
+Логин пользователя
+Количество бонусных баллов (*)
+Кнопка “Выход”
+Состояние: пользователь не авторизован
+Ссылка на корзину, ведет на страницу авторизации
+Ссылка на вход
+Главная страница
+Содержит:
+1. Карточки товаров (12 шт. на странице)
+    1.1. Фотография товара
+    1.2. Название товара
+    1.3. Цена товара
+2. Пагинация
 
-## Learning Laravel
+Состояние: товар добавлен в корзину
+Карточки товаров
+Надпись с информацией о количестве товаров в корзине
+Кнопки "+" и "-"
+Состояние: товар не добавлен в корзину
+Карточки товаров
+Кнопка "В корзину"
+Корзина
+Содержит:
+Список товаров
+Наименование товара
+Количество товара в корзине
+Цена 1 шт. товара
+Цена 1 шт. товара после скидки (*)
+Получившийся процент скидки на товар (*)
+Информация об общей сумме заказа
+Информация об общей сумме заказа после скидки (*)
+Информация о полученном проценте скидки на весь заказ (*)
+Вход
+Содержит:
+Поле ввода логина
+Поле ввода пароля
+Кнопка входа
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Техническое задание
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### Авторизация
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Пользователи должны быть созданы через сиды с заранее заданными логинами и паролями.
+Если ввести в поля ввода авторизации данные из сидов, то пользователя должно авторизовать на сайте:
+Шапка переходит в состояние “пользователь авторизован”
 
-## Laravel Sponsors
+Если пользователь ранее добавлял товары в корзину, то на странице корзины должны отображаться выбранные товары и на главной странице у соответствующих товаров должно отображаться состояние “товар добавлен в корзину”
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Если в поля ввода на странице авторизации ввести несуществующие/неправильные данные, то под полем ввода логина должна отобразиться ошибка "Неверные данные входа".
+Пока пользователь не авторизован, то при попытке перейти в корзину или добавить товар в корзину, его должно перекидывать на страницу авторизации. При переходе по прямой ссылке на корзину неавторизованного пользователя также должно перекидывать на вход.
+При переходе по прямой ссылке на вход авторизованного пользователя должно перекидывать на главную страницу.
+При клике по кнопке “Выход” в шапке пользователя должно разлогинить (шапка переходит в состояние “пользователь не авторизован”, корзина и добавление в корзину недоступны, страница входа доступна, все карточки на главной в состоянии “товар не добавлен в корзину”).
 
-### Premium Partners
+#### Главная страница
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+По клику на кнопку "в корзину" товар должен добавиться в корзину и карточка товара должна перейти в состояние “товар добавлен в корзину”, при переходе на страницу корзины товар должен там отображаться.
+По клику на кнопку “+” количество товаров в корзине должно увеличиваться на 1 (на карточке товара должно увеличиться количество товаров в корзине, на странице корзины должно отображаться то же количество товара).
+По клику на кнопку “-”, если товаров больше 1, то количество товаров должно уменьшиться на 1 (на карточке товара должно уменьшиться количество товаров в корзине, на странице корзины должно отображаться то же количество товара), если товар 1, то товар должен удалиться из корзины (карточка товара должна перейти в состояние “товар не добавлен в корзину”, на странице корзины не должно отображаться этого товара).
 
-## Contributing
+#### Корзина
+Корзина должна быть привязана к определенному пользователю, то есть если зайти на сайт под другими учетными данными, то корзина должна перестроиться в соответствии с тем, какие товары новый пользователь добавлял в корзину ранее.
+На странице должны выводиться все товары, которые пользователь добавлял в корзину. Для каждого товара должны выводиться количество этого товара в корзине и его цена за 1шт. Внизу страницы должна отображаться полная сумма заказа.
+По клику на кнопку “Заказать” ничего не происходит.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Задание “со звёздочкой”
 
-## Code of Conduct
+##### Суть задания
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+У каждого пользователя есть некое количество бонусных баллов, которые могут списываться на заказ в соотношении 1 балл = 1 рубль. Количество баллов пользователя должно быть предзаполнено в сидах.
+Баллы можно списать не на все товары. На какие товары можно списывать, а на какие нет - также должно быть предзаполнено в сидах. Карточки товаров, на которые можно списать баллы, должны выделяться другим цветом на главной странице.
+Баллов можно списать до 100% от суммы заказа.
+В шапке должно отображаться количество баллов пользователя. На странице корзины должны выводиться пункты из описания, отмеченные “*”.
+Метод распределения скидки
+На все товары в корзине, на которые может распределяться скидка, баллы списываются в равном процентном соотношении. Внизу страницы должны выводиться информация об общем проценте скидки на весь заказ, включая товары без скидки, округленный вверх.
