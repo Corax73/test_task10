@@ -13,7 +13,7 @@ function btnAddHandler(btn) {
                     location.reload()
                 })
                 .catch(error => {
-                    console.log(error)
+                    window.location.href = 'login';
                 });
         });
     }

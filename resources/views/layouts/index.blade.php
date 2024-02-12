@@ -6,7 +6,7 @@
 <div class="container">
 
     <div class="row">
-        @if ($products)
+        @if (isset($products))
         @foreach ($products as $product)
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
             <!-- TODO: добавлять синюю рамку карточке товара (класс border-primary), если на товар можно потратить баллы -->

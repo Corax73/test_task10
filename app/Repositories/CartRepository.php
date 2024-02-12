@@ -87,7 +87,7 @@ class CartRepository
             $user = User::findOrfail($userId);
             if ($user->bonuses && $totalPriceByDiscountProducts) {
                 if ($totalPriceByDiscountProducts - $user->bonuses > 0) {
-                    $discountOnSomeProducts = ceil(($totalPriceByDiscountProducts - $user->bonuses) / $totalPriceByDiscountProducts * 100);
+                    $discountOnSomeProducts = ceil(($totalPriceByDiscountProducts - ($totalPriceByDiscountProducts - $user->bonuses)) / $totalPriceByDiscountProducts * 100);
                     $discountedPrice = $totalPriceByDiscountProducts + $totalPriceWithoutDiscountProducts - $user->bonuses;
                     $totalDiscount = ceil(
                         ($totalPriceByDiscountProducts + $totalPriceWithoutDiscountProducts - $discountedPrice)

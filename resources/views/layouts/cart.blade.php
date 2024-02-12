@@ -7,7 +7,7 @@
     <h1 class="text-center mt-5">Корзина</h1>
     <div class="row mb-4">
         <div class="col-12 col-lg-8">
-            @if ($products)
+            @if (isset($products))
             @foreach ($products as $product)
             <article class="card mt-4 overflow-hidden">
                 <div class="row">
@@ -41,7 +41,7 @@
         <div class="col-12 col-lg-4">
             <div class="card p-3 mt-4">
                 <p class="fs-4">Общая сумма заказа:</p>
-                <p class="fw-bold">{{ $totalFull }} ₽</p>
+                <p class="fw-bold">{{ $totalFull ?? 0}} ₽</p>
                 @if (isset($totalDiscount))
                 <p class="fs-4">Общая сумма заказа c учётом скидки <span>{{ $totalDiscount }}%</span>:</p>
                 <p class="fw-bold">{{ $discountedPrice }} ₽</p>
