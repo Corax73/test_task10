@@ -69,16 +69,18 @@ class CartRepository
                     return $item;
                 })->toArray();
             $products = Product::dateDescendingByIds(array_keys($quantityById));
-            $totalPriceByDiscountProducts = $products->map(function ($item) use ($quantityById) {
+            $totalPriceByDiscountProducts = 0;
+            $totalPriceWithoutDiscountProducts = 0;
+            $prices = $products->map(function ($item) use ($quantityById) {
                 if ($item->bonus_program) {
-                    return $item->price * $quantityById[$item->id];
+                    $resp = ['priceByDiscountProducts' => $item->price * $quantityById[$item->id]];
+                } else {
+                    $resp = ['priceWithoutDiscountProducts' => $item->price * $quantityById[$item->id]];
                 }
-            })->sum();
-            $totalPriceWithoutDiscountProducts = $products->map(function ($item) use ($quantityById) {
-                if (!$item->bonus_program) {
-                    return $item->price * $quantityById[$item->id];
-                }
-            })->sum();
+                return $resp;
+            });
+            $totalPriceByDiscountProducts = $prices->sum('priceByDiscountProducts');
+            $totalPriceWithoutDiscountProducts = $prices->sum('priceWithoutDiscountProducts');
             $data = [
                 'products' => $products,
                 'quantity' => $quantityById,
