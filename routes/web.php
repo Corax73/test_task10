@@ -28,3 +28,5 @@ Route::controller(MainController::class)
         Route::post('/cart/product/{id}', 'addProduct')->middleware('auth')->name('addProduct');
         Route::delete('/cart/product/{id}', 'delProduct')->middleware('auth')->name('delProduct');
     });
+
+Route::get('/telescope', [TelescopeServiceProvider::class, 'gate']);

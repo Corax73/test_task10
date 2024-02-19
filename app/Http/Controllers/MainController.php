@@ -13,18 +13,13 @@ class MainController extends Controller
     {
         $products = Product::dateDescending();
         $data = ['products' => $products];
-        $userCart = Cart::where(['user_id' => Auth::id()])
-            ->with('products:id')
-            ->get();
+        $userCart = Cart::where(['user_id' => Auth::id()])->get();
         if ($userCart->isNotEmpty()) {
-            $data['addedProducts'] = $userCart->first()
-                ?->products
-                ?->map(function ($item) use ($userCart) {
-                    $pivotRow = $userCart->first()->products()->where('product_id', $item?->id)->first()->pivot;
-                    return [$item?->id => $pivotRow->quantity];
-                })->mapWithKeys(function ($item) {
-                    return $item;
-                })->toArray();
+            $data['addedProducts'] = $userCart->first()->products->map(function ($item) {
+                return [$item?->product_id => $item?->quantity];
+            })->mapWithKeys(function ($item) {
+                return $item;
+            })->toArray();
         }
         return view('layouts.index', $data);
     }
