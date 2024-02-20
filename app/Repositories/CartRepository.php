@@ -3,13 +3,14 @@
 namespace App\Repositories;
 
 use App\Models\Cart;
+use App\Models\CartProduct;
 use App\Models\Product;
 use App\Models\User;
 
 class CartRepository
 {
     /**
-     * Finds or creates a new cart entity and creates or updates a record in the pivot table.
+     * Finds or creates a new cart entity and creates or updates a record in the summary model.
      * @param int $productId
      * @param int $userId
      * @return void
@@ -17,32 +18,38 @@ class CartRepository
     public static function addProduct(int $productId, int $userId): void
     {
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
-        if ($cart->products->contains($productId)) {
-            $pivotRow = $cart->products()->where('product_id', $productId)->first()->pivot;
-            $quantity = $pivotRow->quantity + 1;
-            $pivotRow->update(['quantity' => $quantity]);
+        $listProducts = CartProduct::where(['cart_id' => $cart->id, 'product_id' => $productId])->first();
+        if ($listProducts) {
+            $listProducts->quantity += 1;
+            $listProducts->save();
         } else {
-            $cart->products()->attach($productId, ['quantity' => 1]);
+            $listProducts = CartProduct::create(
+                [
+                    'cart_id' => $cart->id,
+                    'product_id' => $productId,
+                    'quantity' => 1
+                ]
+            );
         }
     }
 
     /**
-     * Reduces the quantity or deletes an entry in a pivot table.
+     * Decreases or deletes an entry in an summary model.
      * @param int $productId
      * @param int $userId
      * @return void
      */
     public static function delProduct(int $productId, int $userId): void
     {
-        $cart = Cart::where(['user_id' => $userId])->get();
-        if ($cart->first()->products->contains($productId)) {
-            $pivotRow = $cart->first()->products()->where('product_id', $productId)->first()->pivot;
-            if ($pivotRow->quantity > 0) {
-                $quantity = $pivotRow->quantity - 1;
-                if ($quantity) {
-                    $pivotRow->update(['quantity' => $quantity]);
+        $cart = Cart::where(['user_id' => $userId])->first();
+        $listProducts = CartProduct::where(['cart_id' => $cart->id, 'product_id' => $productId])->first();
+        if ($listProducts) {
+            if ($listProducts->quantity > 0) {
+                $listProducts->quantity -= 1;
+                if ($listProducts->quantity) {
+                    $listProducts->save();
                 } else {
-                    $cart->first()->products()->detach($productId);
+                    $listProducts->delete();
                 }
             }
         }
@@ -56,18 +63,13 @@ class CartRepository
     public static function discountCalculation(int $userId): array
     {
         $data = [];
-        $userCart = Cart::where(['user_id' => $userId])
-            ->with('products:id')
-            ->get();
-        if ($userCart->isNotEmpty()) {
-            $quantityById = $userCart->first()
-                ?->products
-                ?->map(function ($item) use ($userCart) {
-                    $pivotRow = $userCart->first()->products()->where('product_id', $item?->id)->first()->pivot;
-                    return [$item?->id => $pivotRow->quantity];
-                })->mapWithKeys(function ($item) {
-                    return $item;
-                })->toArray();
+        $userCart = Cart::where(['user_id' => $userId])->first();
+        if ($userCart) {
+            $quantityById = $userCart->products->map(function ($item) {
+                return [$item?->product_id => $item?->quantity];
+            })->mapWithKeys(function ($item) {
+                return $item;
+            })->toArray();
             $products = Product::dateDescendingByIds(array_keys($quantityById));
             $totalPriceByDiscountProducts = 0;
             $totalPriceWithoutDiscountProducts = 0;
